@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet/less" type="text/css" href="sankey-barchart.less" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.5.1/less.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+    <link rel="stylesheet" href="libs/bootstrap-4.5.3-dist/css/bootstrap.min.css" />
+
+  <!--
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="libs/bootstrap-4.5.3-dist/js/bootstrap.min.js"></script>
+    <script src="libs/bootstrap-4.5.3-dist/js/bootstrap.bundle.min.js"></script>
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+  </head>
+  <body>
+    <h1>SAB Customer lifecycle management system</h1>
+    <div class="container">
+      <div class="row justify-content-start">
+        <div id="sbarc" class="col-6"
+              style="margin: 1em; width: 750px; height: 300px;">
+              <div id="chart">
+
+              </div>
+        </div>
+        <div class="col-2">
+          <div class="row" >
+            <div id="dropdown_coms">
+              <!--  <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+                  Dropdown button
+                </button>
+                <div class="dropdown-menu">
+                  <p>Communication 1</p>
+                  <p>Communication 2</p>
+                  <p>Communication 3</p>
+                </div>-->
+              </div>
+
+          </div>
+          <div class="row" style="margin-top: 4em;">
+            <p id="com_description"></p>
+          </div>
+        </div>
+        <!-- Create a div where the graph will take place -->
+        <div id="my_dataviz" class="col-3"></div>
+      </div>
+      <div class="row">
+          <div id="chart_gutt" class="col-8"></div>
+
+      </div>
+    </div>
+
+
+
+<!-- Color Scale -->
+<!-- https://d3js.org/d3-scale-chromatic.v1.min.js -->
+
+
+    <script type="text/javascript" src="sankey-barchart_gist.js"></script>
+    <script type="text/javascript">
+      d3version355 = d3
+      var dataset = [
+        {
+          enter: { value: 50000, label: 'All clients',
+                group: 'sended'
+            },
+          exit: { label: 'No Triggers' },
+          comp: 'comp_1'
+        },
+        {
+          enter: { value: 11678, label: 'Followed the link',
+                  group:  'delivered'
+                  },
+          exit: { label: 'No Came to the bank' }
+        },
+        {
+          enter: { value: 1500, label: 'Came to the bank',
+                   group:'target' }
+
+          ,  exit: { label: 'No Buy product' }
+        },
+        {
+          enter: { value: 169, label: 'Buy product' }
+        }
+      ];
+
+      var chart = new SankeyBarchart('#chart', dataset);
+
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js"></script>
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
+    <script src="https://d3js.org/d3-color.v2.min.js"></script>
+    <script src="https://d3js.org/d3-format.v2.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v2.min.js"></script>
+    <script src="https://d3js.org/d3-time.v2.min.js"></script>
+    <script src="https://d3js.org/d3-time-format.v3.min.js"></script>
+
+    <script src="https://d3js.org/d3-scale.v3.min.js"></script>
+    <script src="https://d3js.org/d3-axis.v2.min.js"></script>
+    <script type="text/javascript" src="gantt-chart.js"></script>
+    <script type="text/javascript">
+    d3version5 = d3
+    const data = [
+      {
+        startDate: new Date('2020-07-16T00:00:00'),
+        endDate: new Date('2020-07-24T00:00:00'),
+        label: 'Com 1',
+        id: 'm01',
+        dependsOn: [],
+      },
+      {
+        duration: 9 * 24 * 60 * 60 * 1000, // 7 days
+        endDate: new Date('2020-07-28T00:00:00'),
+        label: 'Com 2',
+        id: 'm02',
+        dependsOn: [],
+      },
+      {
+        startDate: new Date('2020-07-30T00:00:00'),
+        endDate: new Date('2020-08-05T00:00:00'),
+        label: 'Com 3',
+        id: 'm03',
+        dependsOn: [],
+      },
+
+      {
+        startDate: new Date('2020-08-19T00:00:00'),
+        duration: 12 * 24 * 60 * 60 * 1000, // 12 days
+        label: 'Conversion calculation',
+        id: 'm04',
+        dependsOn: ['m01','m02', 'm03'],
+      }
+    ];
+
+    createGanttChart(
+      document.querySelector('#chart_gutt'),
+      data,
+      {
+        elementHeight: 20,
+        sortMode: 'date', // alternatively, 'childrenCount'
+        svgOptions: {
+          width: 1200,
+          height: 400,
+          fontSize: 12
+        }
+      }
+    );
+    </script>
+
+
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script type="text/javascript" src="ver4.js">
+
+    </script>
+    <script type="text/javascript">
+      d3version4 = d3
+      total_cgtg_lineplot = "data/data3.csv"
+      plotcgtgLine(total_cgtg_lineplot)
+    </script>
+
+    <script type="text/javascript">
+    // Create data = list of groups
+    var all_coms = [{
+                      "com_name": "Com 1",
+                      "com_description": "com 1 des"
+                    },
+                    {
+                      "com_name": "Com 2",
+                      "com_description": "com 2 des"
+                    },
+                    {
+                      "com_name": "Com 3",
+                      "com_description": "com 3 des"
+                    }
+                  ];
+    // Initialize the button
+    var dropdownButton = d3.select("#dropdown_coms")
+    .append('select')
+  //  .attr('class', 'btn btn-secondary dropdown-toggle')
+  //  .attr('data-toggle', 'dropdown');
+
+    // add the options to the button
+    dropdownButton // Add a button
+      .selectAll('myOptions') // Next 4 lines add 6 options = 6 colors
+      .data(all_coms, d=> d.com_name)
+      .enter()
+      .append('option')
+      .text(function (d) { return d.com_name; }) // text showed in the menu
+      .attr("value", function (d) { return d.com_name; }); // corresponding value returned by the button
+
+    </script>
+
+
+
+
+    <script type="text/javascript">
+
+
+
+
+
+    com_map_line = {"Com 1": "data/data3.csv",
+                    "Com 2": "data/data_com2.csv",
+                    "Com 3": "data/data_com3.csv"
+              };
+
+    dsets = {
+      "Com 1": [
+        {
+          enter: { value: 50000, label: 'All clients',
+                group: 'sended'
+            },
+          exit: { label: 'No Triggers' },
+          comp: 'comp_1'
+        },
+        {
+          enter: { value: 11678, label: 'Followed the link',
+                  group:  'delivered'
+                  },
+          exit: { label: 'No Came to the bank' }
+        },
+        {
+          enter: { value: 1500, label: 'Came to the bank',
+                   group:'target' }
+
+          ,  exit: { label: 'No Buy product' }
+        },
+        {
+          enter: { value: 169, label: 'Buy product' }
+        }
+      ],
+      "Com 2": [
+        {
+          enter: { value: 20000, label: 'All clients',
+                group: 'sended'
+            },
+          exit: { label: 'No Triggers' },
+          comp: 'comp_1'
+        },
+        {
+          enter: { value: 5678, label: 'Followed the link',
+                  group:  'delivered'
+                  },
+          exit: { label: 'No Came to the bank' }
+        },
+        {
+          enter: { value: 3000, label: 'Came to the bank',
+                   group:'target' }
+
+          ,  exit: { label: 'No Buy product' }
+        },
+        {
+          enter: { value: 40, label: 'Buy product' }
+        }
+      ],
+      "Com 3": [
+        {
+          enter: { value: 30000, label: 'All clients',
+                group: 'sended'
+            },
+          exit: { label: 'No Triggers' },
+          comp: 'comp_1'
+        },
+        {
+          enter: { value: 25807, label: 'Followed the link',
+                  group:  'delivered'
+                  },
+          exit: { label: 'No Came to the bank' }
+        },
+        {
+          enter: { value: 3047, label: 'Came to the bank',
+                   group:'target' }
+
+          ,  exit: { label: 'No Buy product' }
+        },
+        {
+          enter: { value: 113, label: 'Buy product' }
+        }
+      ]
+    };
+
+
+
+      // When the button is changed, run the updateChart function
+    dropdownButton.on("change", function(d) {
+
+        // recover the option that has been chosen
+        var selectedOption = d3.select(this).property("value")
+        console.log(com_map_line[selectedOption]);
+        window.d3 = null
+        d3 = d3version4
+        d3.select("#my_dataviz svg").remove()
+        plotcgtgLine(com_map_line[selectedOption]);
+
+        d3.select("#com_description")
+        .text(selectedOption);
+        // run the updateChart function with this selected option
+        // updateChart(selectedOption)
+
+        //plot bar chart
+        window.d3 = null
+        d3 = d3version355
+        d3.select("#chart").remove()
+        d3.select("#sbarc")
+          .append("div")
+          .attr('id', 'chart');
+        dataset = dsets[selectedOption]
+        var chart = new SankeyBarchart('#chart', dataset);
+
+       //  window.d3 = null
+       //  d3 = d3version5;
+       //  d3.select("#gut_ch").remove();
+       // data = gutt_map[selectedOption];
+       //
+       //  createGanttChart(
+       //    document.querySelector('#chart_gutt'),
+       //    data,
+       //    {
+       //      elementHeight: 20,
+       //      sortMode: 'date', // alternatively, 'childrenCount'
+       //      svgOptions: {
+       //        width: 1200,
+       //        height: 400,
+       //        fontSize: 12
+       //      }
+       //    }
+       //  );
+
+    });
+    </script>
+
+
+  </body>
+</html>
